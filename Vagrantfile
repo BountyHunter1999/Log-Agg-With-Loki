@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "main" do |app|
     app.vm.hostname = "swarm-main"
-    app.vm.synced_folder "./provisioner", "/home/vagrant/provisioner"
+    app.vm.synced_folder "./provisioner/main", "/home/vagrant/provisioner"
     app.vm.network :private_network, ip: "192.168.57.2"
     config.vm.provision "shell", inline: <<-SHELL
       apt-get update -y
@@ -20,7 +20,8 @@ Vagrant.configure("2") do |config|
   (3..4).each do |i|
     config.vm.define "server#{i - 2}" do |app|
     app.vm.hostname = "swarm-node#{i - 2}"
-    app.vm.synced_folder ".", "/vagrant", disabled: true
+    app.vm.synced_folder "./provisioner/hosts", "/home/vagrant/provisioner"
+    # app.vm.synced_folder ".", "/vagrant", disabled: true
     # app.vm.network "private_network", type: "dhcp"
     app.vm.network "private_network", ip: "192.168.57.#{i}"
     app.vm.provider "virtualbox" do |vb|
