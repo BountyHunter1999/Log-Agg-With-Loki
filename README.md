@@ -2,17 +2,25 @@
 
 Log Aggregation with Grafana Loki
 
-# Resources
+## Architecture
 
-## Basic Promtail config
+![Architecture](./arc.png)
+
+- promtail will run from a separate remote server
+- loki and grafana will run in a single remote server behind nginx basic auth protection.
+  - this will somewhat give a protection to our logs
+
+## Resources
+
+### Basic Promtail config
 
 `wget https://raw.githubusercontent.com/grafana/loki/v2.9.1/clients/cmd/promtail/promtail-docker-config.yaml -O promtail-config.yaml`
 
-## Basic Loki config
+### Basic Loki config
 
 `wget https://raw.githubusercontent.com/grafana/loki/v2.9.1/cmd/loki/loki-local-config.yaml -O loki-config.yaml`
 
-## Craete a htpassword
+### Craete a htpassword
 
 - `htpassd -c loki.htpasswd <username>`, replace with your given username
   `sudo apt install apache2-utils`
