@@ -6,8 +6,12 @@ positions:
   filename: /tmp/positions.yaml
 
 clients:
-  # - url: http://loki:3100/loki/api/v1/push
-  - url: http://192.168.57.2:3100/loki/api/v1/push
+  # - url: http://192.168.57.2:3100/loki/api/v1/push
+  - url: ${LOKI_URL}
+    # - url: http://mario:test123@192.168.57.2/loki
+    basic_auth:
+      username: ${LOKI_BASIC_AUTH_USER}
+      password: ${LOKI_BASIC_AUTH_PW}
 
 scrape_configs:
   - job_name: system
@@ -17,3 +21,17 @@ scrape_configs:
         labels:
           job: server_logs
           __path__: /var/log/*log
+      - targets:
+          - localhost
+        labels:
+          job: test_logs
+          __path__: /var/log/test/*log
+
+  # - job_name: containers
+  #   static_configs:
+  #     - targets:
+  #         - localhost
+  #       labels:
+  #         job: remote_logs
+  #         instance: "$LOKI_IP"
+  #         __path__: /var/lib/

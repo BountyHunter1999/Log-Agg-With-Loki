@@ -1,16 +1,16 @@
 version: "3"
 
 networks:
-  loki:
+  loki_nw:
 
 services:
   loki:
     image: grafana/loki:2.9.0
-    ports:
-      - "3100:3100"
+    # ports:
+    #   - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
     networks:
-      - loki
+      - loki_nw
 
   grafana:
     environment:
@@ -37,7 +37,38 @@ services:
         EOF
         /run.sh
     image: grafana/grafana:latest
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000"
     networks:
+      - loki_nw
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./loki.htpasswd:/etc/nginx/loki.htpasswd
+      # - ./loki.conf:/etc/nginx/conf.d/loki.conf
+      # - ./simple.conf:/etc/nginx/conf.d/loki.conf
+      - ./simple.conf:/etc/nginx/nginx.conf
+
+    depends_on:
       - loki
+    networks:
+      - loki_nw
+    restart: always
+  # nginx:
+  #   image: laurentbel/nginx-basic-auth
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - loki
+  #   environment:
+  #     - FORWARD_HOST=loki
+  #     - FORWARD_PORT=3100
+  #     - BASIC_USERNAME=$BASIC_USERNAME
+  #     - BASIC_PASSWORD=$BASIC_PASSWORD
+  #   networks:
+  #     - loki

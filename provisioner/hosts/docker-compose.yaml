@@ -6,4 +6,10 @@ services:
     volumes:
       - /var/log:/var/log
       - /home/vagrant/provisioner/promtail-config.yaml:/etc/promtail/config.yml
-    command: -config.file=/etc/promtail/config.yml
+    command:
+      - -config.file=/etc/promtail/config.yml
+      - -config.expand-env=true
+    environment:
+      - LOKI_URL
+      - LOKI_BASIC_AUTH_USER
+      - LOKI_BASIC_AUTH_PW
