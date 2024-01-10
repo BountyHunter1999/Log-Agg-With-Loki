@@ -20,7 +20,7 @@ Log Aggregation with Grafana Loki
 
 `wget https://raw.githubusercontent.com/grafana/loki/v2.9.1/cmd/loki/loki-local-config.yaml -O loki-config.yaml`
 
-### Craete a htpassword
+### Create a htpassword
 
 - `htpassd -c loki.htpasswd <username>`, replace with your given username
   `sudo apt install apache2-utils`
